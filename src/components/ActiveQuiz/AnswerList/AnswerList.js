@@ -5,7 +5,12 @@ import AnswerItem from './AnswerItem/AnswerItem';
 const AnswerList = props => (
   <ul className={classes.AnswerList}>
     {props.answers.map((answer, i) => (
-      <AnswerItem key={i} answer={answer} onAnswerClick={props.onAnswerClick} />
+      <AnswerItem
+        key={i}
+        answer={answer}
+        onAnswerClick={props.onAnswerClick}
+        state={props.state ? props.state[answer.id] : null}
+      />
     ))}
   </ul>
 );
