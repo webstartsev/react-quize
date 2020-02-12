@@ -49,9 +49,37 @@ class QuizCreator extends Component {
     evt.preventDefault();
   };
 
-  addQuestionHandler = () => {};
+  addQuestionHandler = () => {
+    const quize = this.state.quize.concat();
+    const id = quize.length + 1;
 
-  createQuizHandler = () => {};
+    const { question, option1, option2, option3, option4 } = this.state.formControls;
+
+    const questionItem = {
+      question: question.value,
+      id,
+      rightAnswerId: this.state.rightAnswerId,
+      answers: [
+        { text: option1.value, id: option1.id },
+        { text: option2.value, id: option2.id },
+        { text: option3.value, id: option3.id },
+        { text: option4.value, id: option4.id }
+      ]
+    };
+
+    quize.push(questionItem);
+
+    this.setState({
+      quize,
+      rightAnswerId: 1,
+      isFormValid: false,
+      formControls: createFromControls()
+    });
+  };
+
+  createQuizHandler = () => {
+    console.log(this.state.quize);
+  };
 
   onChangeHandler = (value, controlName) => {
     const formControls = { ...this.state.formControls };
