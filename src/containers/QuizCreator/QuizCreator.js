@@ -126,7 +126,7 @@ class QuizCreator extends Component {
             <Button
               type="success"
               onClick={this.createQuizHandler}
-              disabled={!this.state.isFormValid}
+              disabled={this.state.quize.length === 0}
             >
               Создать тест
             </Button>
