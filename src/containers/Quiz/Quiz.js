@@ -91,7 +91,6 @@ class Quiz extends Component {
   };
 
   render() {
-    console.log('this.state.results: ', this.state.results);
     return (
       <div className={classes.Quiz}>
         <div className={classes.quizWrapper}>
