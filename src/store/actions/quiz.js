@@ -51,7 +51,6 @@ export const fetchQuizesError = err => {
 };
 
 export const fetchQuizById = quizId => {
-  console.log('quizId: ', quizId);
   return async dispatch => {
     dispatch(fetchQuizeByIdStart());
     try {
