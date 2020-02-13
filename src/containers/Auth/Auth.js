@@ -3,6 +3,7 @@ import classes from './Auth.module.css';
 import Button from '../../components/UI/Button/Button';
 import Input from '../../components/UI/Input/Input';
 import { validateControl, validateForm } from '../../form/formFramework';
+import axios from 'axios';
 
 class Auth extends Component {
   state = {
@@ -20,7 +21,7 @@ class Auth extends Component {
           email: true
         }
       },
-      possword: {
+      password: {
         value: ``,
         type: `password`,
         label: `Пароль`,
@@ -39,12 +40,38 @@ class Auth extends Component {
     evt.preventDefault();
   };
 
-  loginHandler = () => {
-    console.log('loginHandler');
+  loginHandler = async () => {
+    const authData = {
+      email: this.state.formControls.email.value,
+      password: this.state.formControls.password.value,
+      returnSecureToken: true
+    };
+    try {
+      const response = await axios.post(
+        `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCAMTVcBvo6QfjtcxMSXFbEhsrUxVdw9Ww`,
+        authData
+      );
+      console.log('response: ', response.data);
+    } catch (err) {
+      console.log('err: ', err);
+    }
   };
 
-  registerHandler = () => {
-    console.log('registerHandler');
+  registerHandler = async () => {
+    const authData = {
+      email: this.state.formControls.email.value,
+      password: this.state.formControls.password.value,
+      returnSecureToken: true
+    };
+    try {
+      const response = await axios.post(
+        `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCAMTVcBvo6QfjtcxMSXFbEhsrUxVdw9Ww`,
+        authData
+      );
+      console.log('response: ', response.data);
+    } catch (err) {
+      console.log('err: ', err);
+    }
   };
 
   generationInputs = () => {
