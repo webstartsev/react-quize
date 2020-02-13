@@ -4,6 +4,7 @@ import Button from '../../components/UI/Button/Button';
 import Input from '../../components/UI/Input/Input';
 import { validateControl, validateForm } from '../../form/formFramework';
 import axios from 'axios';
+import { FIREBASE_API_KEY } from '../../secret.js';
 
 class Auth extends Component {
   state = {
@@ -48,7 +49,7 @@ class Auth extends Component {
     };
     try {
       const response = await axios.post(
-        `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCAMTVcBvo6QfjtcxMSXFbEhsrUxVdw9Ww`,
+        `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${FIREBASE_API_KEY}`,
         authData
       );
       console.log('response: ', response.data);
@@ -65,7 +66,7 @@ class Auth extends Component {
     };
     try {
       const response = await axios.post(
-        `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCAMTVcBvo6QfjtcxMSXFbEhsrUxVdw9Ww`,
+        `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${FIREBASE_API_KEY}`,
         authData
       );
       console.log('response: ', response.data);
