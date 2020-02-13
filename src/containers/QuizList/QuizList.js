@@ -2,16 +2,12 @@ import React, { Component } from 'react';
 import classes from './QuizList.module.css';
 import { NavLink } from 'react-router-dom';
 import Loader from '../../components/UI/Loader/Loader';
-import axios from '../../axios/quiz';
+import { connect } from 'react-redux';
+import { fetchQuizes } from '../../store/actions/quiz';
 
 class QuizList extends Component {
-  state = {
-    quizes: [],
-    loading: true
-  };
-
   renderQuizeItem = () => {
-    return this.state.quizes.map(quiz => {
+    return this.props.quizes.map(quiz => {
       return (
         <li key={quiz.id} className={classes.QuizList_item}>
           <NavLink to={`/quiz/${quiz.id}`} className={classes.QuizList_link}>
@@ -23,24 +19,7 @@ class QuizList extends Component {
   };
 
   componentDidMount = async () => {
-    try {
-      const response = await axios.get(`/qiuzes.json`);
-
-      const quizes = [];
-      Object.keys(response.data).forEach((key, i) => {
-        quizes.push({
-          id: key,
-          name: `Test #${i + 1}`
-        });
-      });
-
-      this.setState({
-        quizes,
-        loading: false
-      });
-    } catch (err) {
-      console.log('err: ', err);
-    }
+    this.props.fetchQuizes();
   };
 
   render() {
@@ -48,7 +27,7 @@ class QuizList extends Component {
       <div className={classes.QuizList}>
         <div>
           <h1 className={classes.QuizList_title}>Quiz List</h1>
-          {this.state.loading ? (
+          {this.props.loading && this.props.quizes.length !== 0 ? (
             <Loader />
           ) : (
             <ul className={classes.QuizList_list}>{this.renderQuizeItem()}</ul>
@@ -59,4 +38,17 @@ class QuizList extends Component {
   }
 }
 
-export default QuizList;
+const mapStateToProps = state => {
+  return {
+    quizes: state.quiz.quizes,
+    loading: state.quiz.loading
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    fetchQuizes: () => dispatch(fetchQuizes())
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(QuizList);
