@@ -1,36 +1,43 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Layout from './hoc/Layout/Layout';
 import Quiz from './containers/Quiz/Quiz';
 import Auth from './containers/Auth/Auth';
 import QuizCreator from './containers/QuizCreator/QuizCreator';
 import QuizList from './containers/QuizList/QuizList';
 import Logout from './components/Logout/Logout';
+import { autoLogin } from './store/actions/auth';
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-function App(props) {
-  let route = (
-    <Switch>
-      <Route path="/auth" component={Auth} />
-      <Route path="/quiz/:id" component={Quiz} />
-      <Route path="/" component={QuizList} />
-      <Redirect to="/" />
-    </Switch>
-  );
+class App extends Component {
+  componentDidMount() {
+    this.props.autoLogin();
+  }
 
-  if (props.isAuth) {
-    route = (
+  render() {
+    let route = (
       <Switch>
-        <Route path="/quize-creator" component={QuizCreator} />
+        <Route path="/auth" component={Auth} />
         <Route path="/quiz/:id" component={Quiz} />
         <Route path="/" component={QuizList} />
-        <Route path="/logout" component={Logout} />
         <Redirect to="/" />
       </Switch>
     );
-  }
 
-  return <Layout>{route}</Layout>;
+    if (this.props.isAuth) {
+      route = (
+        <Switch>
+          <Route path="/quize-creator" component={QuizCreator} />
+          <Route path="/quiz/:id" component={Quiz} />
+          <Route path="/" component={QuizList} />
+          <Route path="/logout" component={Logout} />
+          <Redirect to="/" />
+        </Switch>
+      );
+    }
+
+    return <Layout>{route}</Layout>;
+  }
 }
 
 const mapStateToProps = state => {
@@ -39,4 +46,10 @@ const mapStateToProps = state => {
   };
 };
 
-export default withRouter(connect(mapStateToProps)(App));
+const mapDispatchToProps = dispatch => {
+  return {
+    autoLogin: () => dispatch(autoLogin())
+  };
+};
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
