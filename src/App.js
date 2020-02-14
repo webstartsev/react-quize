@@ -4,19 +4,39 @@ import Quiz from './containers/Quiz/Quiz';
 import Auth from './containers/Auth/Auth';
 import QuizCreator from './containers/QuizCreator/QuizCreator';
 import QuizList from './containers/QuizList/QuizList';
-import { Route, Switch } from 'react-router-dom';
+import Logout from './components/Logout/Logout';
+import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-function App() {
-  return (
-    <Layout>
-      <Switch>
-        <Route path="/auth" component={Auth}></Route>
-        <Route path="/quize-creator" component={QuizCreator}></Route>
-        <Route path="/quiz/:id" component={Quiz}></Route>
-        <Route path="/" component={QuizList}></Route>
-      </Switch>
-    </Layout>
+function App(props) {
+  let route = (
+    <Switch>
+      <Route path="/auth" component={Auth} />
+      <Route path="/quiz/:id" component={Quiz} />
+      <Route path="/" component={QuizList} />
+      <Redirect to="/" />
+    </Switch>
   );
+
+  if (props.isAuth) {
+    route = (
+      <Switch>
+        <Route path="/quize-creator" component={QuizCreator} />
+        <Route path="/quiz/:id" component={Quiz} />
+        <Route path="/" component={QuizList} />
+        <Route path="/logout" component={Logout} />
+        <Redirect to="/" />
+      </Switch>
+    );
+  }
+
+  return <Layout>{route}</Layout>;
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    isAuth: !!state.auth.token
+  };
+};
+
+export default withRouter(connect(mapStateToProps)(App));
