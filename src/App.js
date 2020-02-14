@@ -19,7 +19,7 @@ class App extends Component {
       <Switch>
         <Route path="/auth" component={Auth} />
         <Route path="/quiz/:id" component={Quiz} />
-        <Route path="/" component={QuizList} />
+        <Route path="/" exact component={QuizList} />
         <Redirect to="/" />
       </Switch>
     );
@@ -29,8 +29,8 @@ class App extends Component {
         <Switch>
           <Route path="/quize-creator" component={QuizCreator} />
           <Route path="/quiz/:id" component={Quiz} />
-          <Route path="/" component={QuizList} />
           <Route path="/logout" component={Logout} />
+          <Route path="/" exact component={QuizList} />
           <Redirect to="/" />
         </Switch>
       );
