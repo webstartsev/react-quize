@@ -3,8 +3,8 @@ import classes from './Auth.module.css';
 import Button from '../../components/UI/Button/Button';
 import Input from '../../components/UI/Input/Input';
 import { validateControl, validateForm } from '../../form/formFramework';
-import axios from 'axios';
-import { FIREBASE_API_KEY } from '../../secret.js';
+import { connect } from 'react-redux';
+import auth from '../../store/actions/auth';
 
 class Auth extends Component {
   state = {
@@ -42,37 +42,19 @@ class Auth extends Component {
   };
 
   loginHandler = async () => {
-    const authData = {
-      email: this.state.formControls.email.value,
-      password: this.state.formControls.password.value,
-      returnSecureToken: true
-    };
-    try {
-      const response = await axios.post(
-        `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${FIREBASE_API_KEY}`,
-        authData
-      );
-      console.log('response: ', response.data);
-    } catch (err) {
-      console.log('err: ', err);
-    }
+    this.props.auth(
+      this.state.formControls.email.value,
+      this.state.formControls.password.value,
+      true
+    );
   };
 
   registerHandler = async () => {
-    const authData = {
-      email: this.state.formControls.email.value,
-      password: this.state.formControls.password.value,
-      returnSecureToken: true
-    };
-    try {
-      const response = await axios.post(
-        `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${FIREBASE_API_KEY}`,
-        authData
-      );
-      console.log('response: ', response.data);
-    } catch (err) {
-      console.log('err: ', err);
-    }
+    this.props.auth(
+      this.state.formControls.email.value,
+      this.state.formControls.password.value,
+      false
+    );
   };
 
   generationInputs = () => {
@@ -136,4 +118,10 @@ class Auth extends Component {
   }
 }
 
-export default Auth;
+const mapDispatchToProps = dispatch => {
+  return {
+    auth: (email, password, isLogin) => dispatch(auth(email, password, isLogin))
+  };
+};
+
+export default connect(null, mapDispatchToProps)(Auth);
